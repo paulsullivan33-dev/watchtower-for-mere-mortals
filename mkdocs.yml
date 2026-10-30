@@ -1,0 +1,28 @@
+site_name: Watchtower for Mere Mortals
+site_description: A program that keeps your Docker containers updated by itself. How Watchtower notices a new image, swaps the container for a fresh one with the same settings, chooses what it may touch, and reports what it did — including which of the two Watchtower projects is the living one, and the limits stated plainly.
+site_url: https://paulsullivan33-dev.github.io/watchtower-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text CC BY 4.0, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What Watchtower Is: what-watchtower-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing Watchtower: installing-watchtower.md
+  - Your First Update: your-first-update.md
+  - Choosing What to Update: choosing-what-to-update.md
+  - Schedules and Restarts: schedules-and-restarts.md
+  - Linked Containers: linked-containers.md
+  - Lifecycle Hooks: lifecycle-hooks.md
+  - Notifications: notifications.md
+  - Private Registries: private-registries.md
+  - The HTTP API and Metrics: http-api-and-metrics.md
+  - Recipes: recipes.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

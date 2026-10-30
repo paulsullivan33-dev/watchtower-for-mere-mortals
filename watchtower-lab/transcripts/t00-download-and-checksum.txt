@@ -1,0 +1,25 @@
+t00 — downloading the release binary and verifying its checksum
+Date: 2026-10-30. Machine: x86_64 Linux sandbox (uname -m = x86_64).
+
+$ curl -s https://api.github.com/repos/nicholas-fedor/watchtower/releases?per_page=5
+v1.23.2 2026-10-22T03:49:09Z   <- latest release at lab time
+v1.23.1 2026-10-13T22:31:44Z
+v1.23.0 2026-10-06T19:13:38Z
+
+$ curl -sLO https://github.com/nicholas-fedor/watchtower/releases/download/v1.23.2/watchtower_linux_amd64_1.23.2.tar.gz
+$ curl -sLO https://github.com/nicholas-fedor/watchtower/releases/download/v1.23.2/checksums.txt
+$ grep linux_amd64 checksums.txt
+e8429673b67a61ff00cd6891c781b744a39f479ada9d8bfddc89c324d11c7ae8  watchtower_linux_amd64_1.23.2.tar.gz
+
+$ sha256sum -c   (the linux_amd64 line of checksums.txt)
+watchtower_linux_amd64_1.23.2.tar.gz: OK
+
+$ sha256sum watchtower_linux_amd64_1.23.2.tar.gz
+e8429673b67a61ff00cd6891c781b744a39f479ada9d8bfddc89c324d11c7ae8  watchtower_linux_amd64_1.23.2.tar.gz
+
+$ tar tzf watchtower_linux_amd64_1.23.2.tar.gz
+LICENSE.md
+watchtower
+
+$ file wt/watchtower   (after extraction)
+wt/watchtower: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), statically linked, Go BuildID=ysrJaIMFUBGAQEoZghxX/zsCMAkMShBkqbTecLGAI/MJcXm2FPKyvis86zkkeB/yUqWet4U0mSxR6B7GBr1, BuildID[sha1]=5808e1098957058831ff4ddeb09cc83110f6844d, stripped

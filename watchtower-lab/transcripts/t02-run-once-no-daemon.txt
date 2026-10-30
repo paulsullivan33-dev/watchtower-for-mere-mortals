@@ -1,0 +1,14 @@
+t02 — running watchtower with no Docker daemon reachable
+The lab machine has no Docker daemon and no /var/run/docker.sock:
+
+$ ls -la /var/run/docker.sock
+ls: cannot access '/var/run/docker.sock': No such file or directory
+
+$ ./watchtower --run-once
+(process exit code: 0 — the failure is reported in the log, not the exit code)
+
+time=2026-10-30T22:24:32Z level=warn msg="Ping failed during initialization. Will negotiate on first API call" error="failed to connect to the docker API at unix:///var/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /var/run/docker.sock: connect: no such file or directory"
+time=2026-10-30T22:24:33Z level=info msg="Watchtower 1.23.2 using Docker API v1.56"
+time=2026-10-30T22:24:33Z level=info msg="Using no notifications"
+time=2026-10-30T22:24:33Z level=info msg="Running a one time update"
+time=2026-10-30T22:24:33Z level=error msg="Update execution failed" error="failed to list containers: failed to list containers: failed to connect to the docker API at unix:///var/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /var/run/docker.sock: connect: no such file or directory"

@@ -1,0 +1,15 @@
+t04 — environment variable names, proven by feeding the real
+1.23.2 binary values it must reject. A variable Watchtower does
+not read would be silently ignored; both of these were read and
+objected to, which proves the binding (and the error names the
+setting it belongs to).
+
+  $ WATCHTOWER_COOLDOWN_DELAY=banana ./watchtower --run-once
+  level=fatal msg="Failed to load configuration" error="cooldown-delay: invalid duration \"banana\": invalid character in duration string: 'b' in \"banana\" at position 0"
+
+  $ WATCHTOWER_POLL_INTERVAL=banana ./watchtower --run-once
+  {"level":"fatal","error":"interval: parse int: strconv.Atoi: parsing \"banana\": invalid syntax","message":"Failed to apply environment configuration"}
+
+So chapter 3's WATCHTOWER_POLL_INTERVAL (for --interval) and
+recipe 2's WATCHTOWER_COOLDOWN_DELAY (for --cooldown-delay) are
+the fork's real variable names, not guesses.

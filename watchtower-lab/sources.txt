@@ -1,0 +1,54 @@
+# Sources consulted for this guide
+
+Everything behavioural in this guide that the lab could not run
+(see criteria.md) comes from the project's own documentation and
+repositories, read on 2026-10-30:
+
+## The two projects
+
+- Original project, repository (archived; its README opens with
+  "This project is no longer maintained"):
+  https://github.com/containrrr/watchtower
+- Original project's final release, v1.7.1 (2023-11-11):
+  https://github.com/containrrr/watchtower/releases
+- The unmaintained announcement the README points to:
+  https://github.com/containrrr/watchtower/discussions/2135
+- Maintained fork, repository:
+  https://github.com/nicholas-fedor/watchtower
+- Maintained fork, releases (v1.23.2 of 2026-10-22 was current):
+  https://github.com/nicholas-fedor/watchtower/releases
+- Maintained fork, Docker Hub image:
+  https://hub.docker.com/r/nickfedor/watchtower
+
+## Documentation read
+
+Classic documentation (containrrr.dev), still the clearest prose
+account of the shared behaviour both builds implement:
+
+- Lifecycle hooks — hook labels, the 60-second default timeout,
+  the timeout-override labels, exit code 75 (EX_TEMPFAIL) skips
+  an update: https://containrrr.dev/watchtower/lifecycle-hooks/
+- Container selection — the enable label, --label-enable,
+  the monitor-only label:
+  https://containrrr.dev/watchtower/container-selection/
+- Linked containers — links, the depends-on label, and
+  network_mode service: treated as an implicit link:
+  https://containrrr.dev/watchtower/linked-containers/
+- Private registries — config.json, docker login, credential
+  helpers: https://containrrr.dev/watchtower/private-registries/
+- Notifications — shoutrrr URLs:
+  https://containrrr.dev/watchtower/notifications/
+
+Fork documentation (in the nicholas-fedor/watchtower repository,
+docs/ directory), used for everything the fork changed or added:
+
+- Quickstart (the nickfedor/watchtower Compose and docker run
+  forms): docs/quickstart/index.md
+- HTTP API authentication — the two tokens, the Authorization
+  header forms, the unauthenticated probe endpoints /livez,
+  /readyz, /startupz: docs/http-api/configuration/authentication/index.md
+- HTTP API configuration reference: docs/configuration/http-api/index.md
+
+The flag reference in chapter 3 and throughout comes from the
+real `--help` output of the 1.23.2 binary itself, kept in
+transcripts/t01-help.txt.

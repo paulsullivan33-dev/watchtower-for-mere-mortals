@@ -1,0 +1,67 @@
+t03 — the HTTP API of watchtower 1.23.2, run for real on the lab
+machine (which has no Docker daemon), port 18088.
+
+Command:
+  ./watchtower --http-api-endpoints health,metrics,containers \
+      --http-api-token labtoken --http-api-port 18088
+
+Startup log (timestamps trimmed):
+  level=warn msg="Ping failed during initialization. Will negotiate on first API call" error="failed to connect to the docker API at unix:///var/run/docker.sock; check if the path is correct and if the daemon is running: dial unix /var/run/docker.sock: connect: no such file or directory"
+  level=info msg="Watchtower 1.23.2 using Docker API v1.56"
+  level=info msg="HTTP API enabled and periodic updates disabled"
+  level=info msg="HTTP API server is enabled" host=0.0.0.0 notify=no port=18088 tls=false
+
+The health probes need no token. /readyz tells the truth about the
+missing daemon — it reports unavailable while the process itself is
+perfectly alive:
+
+  $ curl -s http://127.0.0.1:18088/livez
+  OK
+  $ curl -s http://127.0.0.1:18088/startupz
+  OK
+  $ curl -s http://127.0.0.1:18088/readyz
+  Service Unavailable
+
+The data endpoints demand the token. Three ways of sending it were
+tried against /v1/metrics (the token in this lab was "labtoken"):
+
+  1. As the documentation recommends:
+     $ curl -s -H "Authorization: Bearer <redacted>" .../v1/metrics
+     missing or invalid API Key          (HTTP 401)
+
+  2. The token on its own in the header (the form Swagger UI sends):
+     $ curl -s -H "Authorization: labtoken" .../v1/metrics
+     # HELP go_gc_duration_seconds A summary of the wall-time pause (stop-the-world) duration in garbage collection cycles.
+     # TYPE go_gc_duration_seconds summary
+     ... real Prometheus output, 170 lines in total ...
+
+  3. The documented cookie fallback:
+     $ curl -s -H "Cookie: access_token=<redacted>" .../v1/metrics
+     missing or invalid API Key          (HTTP 401)
+
+So on the 1.23.2 binary the bare-header form is the one this lab
+could make work; the guide's chapter 11 reports exactly this and
+chapter 14 turns it into a troubleshooting step. (Verified
+2026-10-30; a later release may well fix the Bearer parsing.)
+
+Watchtower's own metric names, taken from that live /v1/metrics
+response (grep '^watchtower_' | sort -u):
+
+  watchtower_containers_failed
+  watchtower_containers_restarted
+  watchtower_containers_restarted_total
+  watchtower_containers_scanned
+  watchtower_containers_skipped
+  watchtower_containers_updated
+  watchtower_disk_space_max_bytes
+  watchtower_disk_space_warn_bytes
+  watchtower_docker_images_bytes
+  watchtower_docker_images_reclaimable_bytes
+  watchtower_metrics_dropped_total
+  watchtower_scans_failed_total
+  watchtower_scans_skipped_total
+  watchtower_scans_total
+
+A second run used --http-api-endpoints health,metrics,update with
+periodic polls disabled; its log line "HTTP API enabled and
+periodic updates disabled" is quoted in chapter 11.
